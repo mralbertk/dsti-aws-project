@@ -3,6 +3,8 @@ project_name
 
 DSTI AWS Class - April 2022
 
+[![download-data](https://github.com/mralbertk/dsti-aws-project/actions/workflows/download-data.yml/badge.svg?branch=main&event=workflow_dispatch)](https://github.com/mralbertk/dsti-aws-project/actions/workflows/download-data.yml)
+
 Project Organization
 ------------
 
