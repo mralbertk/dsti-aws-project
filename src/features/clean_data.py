@@ -3,7 +3,11 @@ import tensorflow as tf
 
 
 def clean_data(folder):
-    """Some comment here"""
+    """
+    Iterates through image files in a folder and removes corrupted images
+
+    :param folder: Directory to iterate through
+    """
 
     num_skipped = 0
 

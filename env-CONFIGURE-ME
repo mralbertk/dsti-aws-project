@@ -2,15 +2,16 @@
 #
 # Rename file to .env once configured and do not move from root
 #
-# DO NOT ADD THIS FILE TO VERSION CONTROL!
+# DO NOT ADD THE .env FILE TO VERSION CONTROL!
 
 # Directory configuration
 DATA_SOURCE = path/to/raw/data/set
 DATA_FOLDER = "./data/raw"
 S3_BUCKET = your-s3-bucket-to-store-weights
-S3_OBJ_PREFIX = optional-s3-objet-prefix
+S3_UPLOAD_PREFIX = optional-s3-object-prefix
+S3_DOWNLOAD_OBJ = optional-s3-download-object
 
-# TRAINING PARAMETERS (Tune at your own risk)
-IMAGE_SIZE = "(180, 180)"   # Dysfunctional
+# TRAINING PARAMETERS
+IMAGE_SIZE = "180,180"   # Must be a string of format "int,int"
 BATCH_SIZE = "32"
 RDN_SEED = "1337"

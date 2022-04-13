@@ -14,7 +14,8 @@ load_dotenv()
 src = os.getenv("DATA_SOURCE")
 dst = os.getenv("DATA_FOLDER")
 bucket = os.getenv("S3_BUCKET")
-obj_prefix = os.getenv("S3_OBJ_PREFIX")
+obj_upload_prefix = os.getenv("S3_UPLOAD_PREFIX")
+s3_dl_obj = os.getenv("S3_DOWNLOAD_OBJ")
 
 # ---------------- Create data directories ---------------
 os.makedirs("data/external", exist_ok=True)
@@ -23,17 +24,29 @@ os.makedirs("data/processed", exist_ok=True)
 os.makedirs("data/raw", exist_ok=True)
 
 # --------------------- Data loading ----------------------
-# Only download data if not available in local destination
+# Only downloads data if not available in local destination
+#
+# Usage of the loader function:
+#
+#   loader.get_data(url, path) to download via tcp & wget
+#   loader.get_data(s3_bucket, path, s3_object) to load
+#   from an S3 bucket
+#
 if src.split("/")[-1] not in os.listdir(dst):
-    loader.get_data(src, dst)
+
+    # Comment below if not loading from S3
+    loader.get_data(bucket, dst, s3_dl_obj)
+
+    # Uncomment to load via TCP & WGET
+    # loader.get_data(src, dst)
+
     loader.unzip_data(dst)
 
 # --------------------- Data cleaning ---------------------
 cleaner.clean_data(dst)
 
 # ----------------- Training preparation ------------------
-# image_size = tuple(os.getenv("IMAGE_SIZE"))
-image_size = (180, 180)
+image_size = tuple(map(int, os.getenv("IMAGE_SIZE").split(",")))
 batch_size = int(os.getenv("BATCH_SIZE"))
 
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -57,7 +70,6 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 # -------------------- Model Creation ---------------------
-
 model = classifier.make_model(
     input_shape=image_size + (3,), num_classes=2
 )
